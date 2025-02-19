@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouse Ball Control</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: blueviolet;
+        }
+        .ball {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            transition: transform 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+    <div class="ball" id="ball"></div>
+
+    <script>
+        const ball = document.getElementById("ball");
+
+        document.addEventListener("mousemove", (event) => {
+            const x = event.clientX;
+            const y = event.clientY;
+
+            ball.style.transform = `translate(${x}px, ${y}px)`;
+
+            // Send ball position to the backend
+            fetch("http://localhost:7000/update-ball", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ x, y })
+            }).catch(err => console.error("Error:", err));
+        });
+    </script>
+</body>
+</html>
+
